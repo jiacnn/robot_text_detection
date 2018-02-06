@@ -6,7 +6,7 @@ Text-Attentional Convolutional Neural Network(Text-CNN)+ Contrast Enhancement Ma
 
 其中text-cnn侧重于从图像组件中提取与文本相关的区域和特征,过滤非文本区域，结构如图1：
 
-![](/home/jx/图片/1.png)
+![](photoes/1.png)
 
 ​								图一：text-cnn结构
 
@@ -28,7 +28,7 @@ CE-MSERs是一个强大的探测器称为低对比度增强的最大稳定极值
 
 CharSynthetic：80141个特征图片，包含labels和character mask。
 
-![](/home/jx/图片/2.png)
+![](photoes/2.png)
 
 ​					    			图像样本和文本区域
 
@@ -46,15 +46,15 @@ CharSynthetic：80141个特征图片，包含labels和character mask。
 
 - 之所以这样训练的原因：三种任务使用的特征不同（region task使用的特征是pixel-level，属于低级特征），收敛的速度也不同。如果region task训练次数和main task一样多，会导致过拟合。第一阶段训练两个任务之后，模型参数已经将像素级的信息记录下来了。下图为训练阶段三种任务的损失函数随迭代次数的变化情况。
 
-  ![](/home/jx/图片/5.png)
+  ![](photoes/5.png)
 
 ### 结果
 
-![](/home/jx/图片/3.png)
+![](photoes/3.png)
 
 ​							ICDAR 2013数据集上结果
 
-![](/home/jx/图片/4.png)
+![](photoes/4.png)
 
 ​							MSRA-TD500数据集上结果
 
@@ -68,7 +68,7 @@ CharSynthetic：80141个特征图片，包含labels和character mask。
 
 Connectionist Text Proposal Network(CTPN)能够准确的在自然图片中划出文本线。网络结构如下：
 
-![](/home/jx/图片/6.png)
+![](photoes/6.png)
 
 ​			a.网络结构														b.效果展示
 
@@ -117,7 +117,7 @@ RNN输出：每个窗口对应256维特征
 
 ### 结果
 
-![](/home/jx/图片/7.png)
+![](photoes/7.png)
 
 ​							ICDAR2011，ICDAR2013，ICDAR2015库上检测结果
 
@@ -131,7 +131,7 @@ github(Tensorflow): <https://github.com/eragonruan/text-detection-ctpn>
 
 ### 网络结构（SSD+NMS）
 
-![](/home/jx/图片/10.png)
+![](photoes/10.png)
 
 TextBoxes的结构如上，TextBoxes是一个28层的全连接卷积网络。其中13层是继承的VGG-16的网络结构，保留了vgg16的conv1_1到conv4_3的层，vgg16最后的全连接层转换成了参数下采样的卷积层，后面在了一些卷积核池化层，称为conv6到pool11层，额外的9个卷积层添加在VGG-16层之后，Text-box层连接着6个卷积层。在每一个特征位置，一个text-box预测72维向量，这是文本出现的得分（text presencscores）（2维）和12个默认盒子的偏移（offsets）（4层）。一个非最大抑制（NMS）用来聚合所有文本盒子（text-boxlayers）层的输出。
 
@@ -141,7 +141,7 @@ TextBoxes的结构如上，TextBoxes是一个28层的全连接卷积网络。其
 
 Text-box层是TextBoxes的关键组件，一个text-box层同时预测文本存在和边界盒子（bounding boxes），以输入的特征图为条件，在每一个图的位置，输出分类的得分和相关默认盒子的卷积偏移。假设图片和特征图的大小单独用（wim,him）和(wmap,hmap)来表示。在一个和默认盒子b0=(x0,y0,w0,h0)相关的图位置（map location）(i,j)，text-box层预测（△x, △y，△w, △h,c），表明一个盒子b=（x,y,w,h）以置信度c检测到了。
 
-![](/home/jx/图片/1a.png)
+![](photoes/1a.png)
 
 在训练阶段，ground-truth单词盒子与默认盒子根据盒子覆盖度（boxoverlap）对应。根据匹配规则，每一个图位置和多个不同大小的默认盒子对应。这样就高效的把单词分为不同的纵横比和比例，并且TextBoxes还可以学习特定的回归和分类权重来处理相似大小的单词。因此，默认盒子的设计是与特定任务息息相关的。
 
@@ -149,7 +149,7 @@ Text-box层是TextBoxes的关键组件，一个text-box层同时预测文本存�
 
 和一般的物体不一样，单词往往有较大的纵横比。因此，我们设计了长的有大纵横比的默认盒子。特别地，我们设计了6种不同纵横比率的默认盒子，分别是1,2,3,5,7和10.可是，这使得在水平方向上的默认盒子密集而在垂直方向上的默认盒子变得稀疏，这会导致很差的匹配盒子（poor matchingboxes）。
 
-![](/home/jx/图片/1b.png)
+![](photoes/1b.png)
 
 上图为4*4网格的默认盒子的解释，为了更好的可视化，仅仅只有一列默认盒子的纵横比为1和5被描绘出来。剩下的纵横比是2,3,7,10，放的方法都是相似的。黑色（纵横比是5）和蓝色的（纵横比是1）默认盒子位于单元的中心位置。绿色的（纵横比是5）和红色的（纵横比是1）的盒子有相同的纵横比（same aspect ratios）和相对于网格中心的垂直偏移（verticaloffset）（偏移是该单元高的一半）。
 
@@ -167,7 +167,7 @@ Text-box层是TextBoxes的关键组件，一个text-box层同时预测文本存�
 
 ### 结果
 
-![](/home/jx/图片/12.png)
+![](photoes/12.png)
 
 ### 速度
 
@@ -185,7 +185,7 @@ github: <https://github.com/xiaodiu2010/TextBoxes-TensorFlow>
 
 其主要思想是将文本分解为两个局部可检测元素，即段(segment)和链接(link)。段是一个覆盖一个词或文本行的一部分的定向框；一个链接连接两个相邻段，表示它们属于同一个词或文本行。
 
-![](/home/jx/图片/1c.png)网络由卷积特征层（灰色的块）和卷积预测器（灰色的细长箭头）2部分组成。每一层预测出的文本框（黄色的框），最后每个segment会结合起来，也就是前面提到的link。
+![](photoes/1c.png)网络由卷积特征层（灰色的块）和卷积预测器（灰色的细长箭头）2部分组成。每一层预测出的文本框（黄色的框），最后每个segment会结合起来，也就是前面提到的link。
 
 - 整个检测过程分两步
   - **Step 1:** 图像输入到ssd网络，同时输出两类信息
@@ -223,7 +223,7 @@ github: <https://github.com/xiaodiu2010/TextBoxes-TensorFlow>
 
 ### 结果
 
-![](/home/jx/图片/2a.png)
+![](photoes/2a.png)
 
 ### 速度
 
@@ -237,7 +237,7 @@ github(Tensorflow): <https://github.com/dengdan/seglink>
 
 ### 网络结构（FCN+NMS）
 
-![](/home/jx/图片/1d.png)
+![](photoes/1d.png)
 
 ​	(a) Horizontal word detection and recognition pipeline proposed by Jaderberg  (b) Multi-orient text detection pipeline proposed by Zhang et al. (c) Multi-orient text detection pipeline proposed by Yao et al. (d) Horizontal text detection using CTPN, proposed by Tian et al
 
@@ -245,7 +245,7 @@ github(Tensorflow): <https://github.com/dengdan/seglink>
 
 #### FCN网络结构
 
-![](/home/jx/图片/1e.png)
+![](photoes/1e.png)
 
 模型可以分为三个部分：特征提取器，特征合并分支和输出层。
 
@@ -267,11 +267,11 @@ V下标i的坐标，V（a）是几何a的得分。
 
 ### 结果
 
-![](/home/jx/图片/3a.png)
+![](photoes/3a.png)
 
 ### 速度
 
-![](/home/jx/图片/2e.png)
+![](photoes/2e.png)
 
 github: <https://github.com/argman/EAST>
 
@@ -279,7 +279,7 @@ github: <https://github.com/argman/EAST>
 
 ### 网络结构
 
-![](/home/jx/图片/1x.png)
+![](photoes/1x.png)
 
 single-shot text detector包含3个主要部分：
 
@@ -293,13 +293,13 @@ single-shot text detector包含3个主要部分：
 
 #### Text Attention Mechanism
 
-![](/home/jx/图片/d.png)
+![](photoes/d.png)
 
 从Aggregated Inception Features (AIFs)计算出文本注意图，文本注意图显示粗糙的文本区域并编码为AIFS。可以通过文本的像素级二进制掩码（trained byusing a pixel-wise binary mask of text）训练。通过attention，(1).减少了错误的识别框。(2).可以使模型去发现更复杂的文本。(3)提高了发现的准确率。
 
 #### Hierarchical Inception Module
 
-![](/home/jx/图片/v.png)
+![](photoes/v.png)
 
 ### 训练细节
 
@@ -312,13 +312,13 @@ single-shot text detector包含3个主要部分：
 - grid search step = 0.1
 - **Caffe framework**
 - TiTIAN X GPUS. 
-- NMS 阀值0.3   NMS置信阀值0.7
+- NMS 阀值 0.3   NMS置信阀值 0.7
 
 
 
 ### 结果
 
-![](/home/jx/图片/cc.png)
+![](photoes/cc.png)
 
 ​							各个方法间的比较
 
