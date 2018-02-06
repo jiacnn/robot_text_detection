@@ -32,3 +32,4 @@
 
 ## [历史](history.md)
 
+## [方案](solver.md)
